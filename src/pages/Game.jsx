@@ -74,7 +74,7 @@ const Game = () => {
                     <div className="w-full h-full bg-white relative">
                         {/* {(artists[0].id == user.id || artists[1].id == useDebugValue.id) && */}
                         <p className='absolute top-2 right-4'>Prompt: {currentPrompt}</p>
-                        <Canvas socket={socket} players={players} />
+                        <Canvas socket={socket} players={players} left={false} right={false}/>
                         </div>
                     </div>
                 </div>

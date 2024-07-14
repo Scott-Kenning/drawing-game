@@ -6,12 +6,7 @@ import './sunburst.css'; // Import the sunburst background CSS
 
 const App = () => {
     return (
-        <Router>
-          <Routes>
-            <Route path="/" element={<Join />} />
-            <Route path="/:code" element={<Game />} />
-          </Routes>
-        </Router>
+            <Game />
     );
 };
 

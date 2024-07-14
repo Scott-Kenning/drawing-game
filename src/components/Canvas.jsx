@@ -5,8 +5,8 @@ import { faBrush, faEraser, faCircle, faTrash } from '@fortawesome/free-solid-sv
 function Canvas(props) {
   const socket = props.socket;
   
-  const [isLeftPlayer, setIsLeftPlayer] = useState(true); // Change this to test left/right player logic
-  const [isRightPlayer, setIsRightPlayer] = useState(false); // Change this to test left/right player logic
+  const [isLeftPlayer, setIsLeftPlayer] = useState(props.left); // Change this to test left/right player logic
+  const [isRightPlayer, setIsRightPlayer] = useState(props.right); // Change this to test left/right player logic
   const canDraw = true;
   const canvasRef = useRef(null);
   const offscreenCanvasRef = useRef(null);
