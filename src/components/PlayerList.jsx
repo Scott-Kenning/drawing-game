@@ -1,8 +1,10 @@
 import React from 'react';
 
 const PlayerList = (props) => {
-    const players = props.players;
-
+    const players = props.players.filter((player, index, self) => 
+        index === self.findIndex(p => p.name === player.name)
+    );
+    
     return (
         <div className="flex flex-col h-full rounded-lg shadow border border-gray-300">
             <h2 className="text-2xl text-center p-4 border-b-2 border-gray-500">Players</h2>
