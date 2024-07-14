@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../sunburst.css'; // Make sure this path is correct
 
 const Join = () => {
     const [name, setName] = useState('');
     const [gameCode, setGameCode] = useState('');
+    const navigate = useNavigate();
 
     const handlePlay = () => {
-        console.log('Play button clicked', { name, gameCode });
-        // Add your logic for joining the game here
+
+        if (gameCode.length !== 6) {
+            alert('Game code must be 6 characters long');
+            return;
+        }
+        
+        navigate(`/${gameCode}`);
     };
 
     const handleCreatePrivateGame = () => {
@@ -18,7 +25,7 @@ const Join = () => {
     return (
         <main className="h-screen w-screen sunburst-background flex items-center justify-center">
             <div className="w-1/3 rounded bg-blue-600 opacity-95 p-8 shadow-xl">
-                <h1 className="text-3xl text-white text-center mb-8">Join Game</h1>
+                <h1 className="text-3xl text-white text-center mb-8">DuoDraw</h1>
                 <div className="flex flex-col space-y-4">
                     <input
                         type="text"
@@ -38,13 +45,13 @@ const Join = () => {
                         onClick={handlePlay}
                         className="p-2 bg-green-500 text-white rounded"
                     >
-                        Play
+                        Join Game
                     </button>
                     <button
                         onClick={handleCreatePrivateGame}
                         className="p-2 bg-orange-500 text-white rounded"
                     >
-                        Create Private Game
+                        Create Game
                     </button>
                 </div>
             </div>
