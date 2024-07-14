@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Chat from '../components/Chat';
 import PlayerList from '../components/PlayerList';
 import '../sunburst.css'; // Make sure this path is correct
 import Canvas from '../components/Canvas';
+import {GameManager} from '../GameManager';
 
 const Game = () => {
+    const [gameManager] = useState(new GameManager(10));
+
     return (
         <main className="h-[100vh] w-screen p-[5vh] sunburst-background">
             <div className="grid grid-cols-4 w-full h-full">
@@ -12,7 +15,7 @@ const Game = () => {
                 <div className="w-full h-[90vh] p-4 pl-12">
 
                     <div className="rounded-lg bg-white shadow w-full h-full border border-4 border-gray-800">
-                        <PlayerList />
+                        <PlayerList players={gameManager.players}/>
                     </div>
                 </div>
                 {/* Drawing board side */}

@@ -116,4 +116,4 @@ class GameManager {
     }
 }
 
-export default { GameState, Player, GameManager };
+export { GameState, Player, GameManager };
