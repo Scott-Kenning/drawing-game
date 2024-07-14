@@ -1,0 +1,6 @@
+/* sunburst.css */
+.sunburst-background {
+    background: repeating-conic-gradient(#62bcf5 0% 5%, #1ba1f5 5% 10%);
+    background-size: 100% 100%, 200% 200%;
+    background-position: 50% 50%;
+}
