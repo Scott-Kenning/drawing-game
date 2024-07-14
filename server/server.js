@@ -7,13 +7,13 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Update to match your React app URL
+    origin: "http://localhost:5173/", // Update to match your React app URL
     methods: ["GET", "POST"]
   }
 });
 
 app.use(cors({
-  origin: "http://localhost:5173", // Update to match your React app URL
+  origin: "http://localhost:5173/", // Update to match your React app URL
   methods: ["GET", "POST"]
 })); // Use CORS middleware
 
@@ -23,10 +23,10 @@ let drawingData = [];
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  
+
   // Send the current drawing data to the new client
   socket.emit('currentDrawing', drawingData);
-  
+
   socket.on('drawing', (data) => {
     drawingData.push(data);
     socket.broadcast.emit('drawing', data);
@@ -34,6 +34,11 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+  });
+
+  socket.on('clear', () => {
+    drawingData = [];
+    io.emit('clear');
   });
 });
 
