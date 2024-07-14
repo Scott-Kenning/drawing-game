@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Chat = () => {
-    const [messages, setMessages] = useState([
-        { id: 1, text: 'Hello! Welcome to the game.', sender: 'system' },
-        { id: 2, text: 'Thanks! Excited to play.', sender: 'user' }
-    ]);
+const Chat = (props) => {
+    const socket = props.socket;
+
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+
+    const [user] = useState({ id: Date.now(), name: 'User' + Math.floor(Math.random() * 1000000), text: '' });
+
+    // socket handling of chat messages
+    useEffect(() => {
+        // get chat history
+        socket.on('currentChat', (chatMessages) => {
+          setMessages(chatMessages);
+        });
+    
+        socket.on('chatMessage', (message) => {
+          setMessages((prevMessages) => [...prevMessages, message]);
+        });
+    
+        return () => {
+          socket.off('currentChat');
+          socket.off('chatMessage');
+        };
+      }, []);
 
     const handleSend = () => {
         if (input.trim()) {
-            const newMessage = { id: messages.length + 1, text: input, sender: 'user' };
-            setMessages([...messages, newMessage]);
+            const newMessage = { id: messages.length + 1, text: input, sender: user.name };
+            // setMessages([...messages, newMessage]);
+            socket.emit('chatMessage', newMessage);
             console.log(newMessage);
             setInput('');
         }
@@ -27,7 +46,7 @@ const Chat = () => {
             <div className="flex-1 overflow-y-auto p-4">
                 {messages.map(message => (
                     <div key={message.id} className={`mb-2 ${message.sender === 'system' ? 'text-blue-700' : 'text-black'}`}>
-                        <span className="font-bold">{message.sender === 'system' ? 'System: ' : 'You: '}</span>
+                        <span className="font-bold">{message.sender === user.name ? 'You: ' : message.sender + ': '}</span>
                         {message.text}
                     </div>
                 ))}
