@@ -38,12 +38,8 @@ app.use(express.static('public'));
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    // Send the current drawing data to the new client
     socket.emit('currentDrawing', drawingData);
-  
-    // Send the current chat messages to the new client
     socket.emit('currentChat', chatMessages);
-  
     socket.on('drawing', (data) => {
       drawingData.push(data);
       socket.broadcast.emit('drawing', data);
@@ -55,37 +51,47 @@ io.on('connection', (socket) => {
       io.emit('guess', { id: socket.id, text: message.text });
     });
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-        players = players.filter(p => p.id !== socket.id);
-        io.emit('updatePlayers', players);
-    });
-
-    socket.on('requestStartGame', () => {
-        if (gameState === GameState.WAITING) {
+    socket.on('newPlayer', (name) => {
+        console.log('new player:', name);
+        const newPlayer = { id: socket.id, name };
+        players.push(newPlayer);
+        io.emit('newPlayer', players); // Broadcast updated player list to all clients
+        if (players.length >= 2 && gameState === GameState.WAITING) {
             startGame();
         }
     });
 
-    const newPlayer = { id: socket.id, name: "Player" };
-    players.push(newPlayer);
-    io.emit('newPlayer', players);
-    if (players.length >= 2 && gameState === GameState.WAITING) {
-        startGame();
-    }
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+        players = players.filter(p => p.id !== socket.id);
+        io.emit('updatePlayers', players); // Update player list after disconnection
+    });
+
+    socket.on('chatMessage', (message) => {
+        chatMessages.push(message);
+        io.emit('chatMessage', message);
+        if (message.text.toLowerCase() === Prompts[currentPromptIndex].toLowerCase()) {
+            io.emit('guess', { id: socket.id, text: message.text, correct: true });
+        } else {
+            io.emit('guess', { id: socket.id, text: message.text, correct: false });
+        }
+    });
 });
 
 const startGame = () => {
     gameState = GameState.ACTIVE;
-    currentPromptIndex = 0;
+    nextTurn();
+};
+
+const nextTurn = () => {
     if (currentPromptIndex >= Prompts.length) {
         gameState = GameState.FINISHED;
         io.emit('gameFinished');
         return;
     }
-    const currentPrompt = Prompts[currentPromptIndex++];
+    currentPrompt = Prompts[currentPromptIndex++];
     io.emit('newPrompt', currentPrompt);
-    setTimeout(nextTurn, 60000); // Move to the next prompt after 60 seconds
+    turnTimeout = setTimeout(nextTurn, 60000); // Move to the next prompt after 60 seconds
 };
 
 server.listen(3001, () => {
