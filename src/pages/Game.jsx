@@ -3,6 +3,9 @@ import Chat from '../components/Chat';
 import PlayerList from '../components/PlayerList';
 import '../sunburst.css'; // Make sure this path is correct
 import Canvas from '../components/Canvas';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3001');
 
 const Game = () => {
     return (
@@ -20,14 +23,14 @@ const Game = () => {
                     <div className="rounded-lg shadow w-full h-full border border-4 border-gray-800">
                         {/* Drawing board */}
                         <div className="h-full w-full bg-white">
-                            <Canvas />
+                            <Canvas socket={socket}/>
                         </div>
                     </div>
                 </div>
                 <div className="w-full h-[90vh] p-4 pr-12">
                     {/* Chat */}
                     <div className="rounded-lg bg-white shadow w-full h-full border border-4 border-gray-800">
-                        <Chat />
+                        <Chat socket={socket}/>
                     </div>
                 </div>
             </div>

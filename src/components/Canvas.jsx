@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+function Canvas(props) {
+  const socket = props.socket;
 
-function Canvas() {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);

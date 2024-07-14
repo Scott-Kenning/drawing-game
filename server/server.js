@@ -20,16 +20,27 @@ app.use(cors({
 app.use(express.static('public'));
 
 let drawingData = [];
+let chatMessages = [
+  { id: 1, text: 'Hello! Welcome to the game.', sender: 'System' }
+]; // Store chat messages
 
 io.on('connection', (socket) => {
   console.log('a user connected');
   
   // Send the current drawing data to the new client
   socket.emit('currentDrawing', drawingData);
-  
+
+  // Send the current chat messages to the new client
+  socket.emit('currentChat', chatMessages);
+
   socket.on('drawing', (data) => {
     drawingData.push(data);
     socket.broadcast.emit('drawing', data);
+  });
+
+  socket.on('chatMessage', (message) => {
+    chatMessages.push(message);
+    io.emit('chatMessage', message);
   });
 
   socket.on('disconnect', () => {
