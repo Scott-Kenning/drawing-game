@@ -46,16 +46,6 @@ io.on('connection', (socket) => {
     });
 
 
-    socket.on('newPlayer', (name) => {
-        console.log('new player:', name);
-        const newPlayer = { id: socket.id, name };
-        players.push(newPlayer);
-        io.emit('newPlayer', players); // Broadcast updated player list to all clients
-        if (players.length >= 2 && gameState === GameState.WAITING) {
-            startGame();
-        }
-    });
-
     socket.on('disconnect', () => {
         console.log('user disconnected');
         players = players.filter(p => p.id !== socket.id);
@@ -71,6 +61,14 @@ io.on('connection', (socket) => {
             io.emit('guess', { id: socket.id, text: message.text, correct: false });
         }
     });
+
+    console.log('new player');
+    const newPlayer = { id: socket.id, name: "Player" };
+    players.push(newPlayer);
+    io.emit('newPlayer', players); // Broadcast updated player list to all clients
+    if (players.length >= 2 && gameState === GameState.WAITING) {
+        startGame();
+    }
 });
 
 const startGame = () => {
