@@ -6,7 +6,8 @@ import Canvas from '../components/Canvas';
 import {GameManager} from '../GameManager';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+// const socket = io('http://localhost:3001');
+const socket = io('http://134.87.57.28/3001');
 
 const Game = () => {
     const [gameManager] = useState(new GameManager(10));

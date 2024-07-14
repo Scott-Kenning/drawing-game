@@ -7,13 +7,13 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173/", // Update to match your React app URL
+    origin: "*", // Allow all origins for local network
     methods: ["GET", "POST"]
   }
 });
 
 app.use(cors({
-  origin: "http://localhost:5173/", // Update to match your React app URL
+  origin: "*", // Allow all origins for local network
   methods: ["GET", "POST"]
 })); // Use CORS middleware
 
@@ -53,6 +53,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3001, () => {
+server.listen(3001, '0.0.0.0', () => {
   console.log('listening on *:3001');
 });
