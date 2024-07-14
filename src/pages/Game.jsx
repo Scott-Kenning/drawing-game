@@ -10,60 +10,40 @@ const socket = io('http://localhost:3001');
 const Game = () => {
     const [players, setPlayers] = useState([]);
     const [gameState, setGameState] = useState(GameState.WAITING);
-    const [currentPrompt, setCurrentPrompt] = useState('');
-    const [turnStartTime, setTurnStartTime] = useState(new Date());
     const [messages, setMessages] = useState([]);
 
-    // Handle a guess
-    const makeGuess = (playerId, guess) => {
-        if (gameState === GameState.ACTIVE && guess.toLowerCase() === currentPrompt) {
-            const timeTaken = new Date() - turnStartTime;
-            const score = 100 * (60000 - timeTaken) / 60000;
-            setPlayers(prevPlayers => prevPlayers.map(player =>
-                player.id === playerId ? { ...player, score: player.score + Math.max(0, score) } : player
-            ));
-        }
-    };
-
-    // WebSocket listeners
     useEffect(() => {
-        socket.on('newPlayer', (players) => {
-            setPlayers(players);
+        socket.on('newPlayer', (updatedPlayers) => {
+            setPlayers(updatedPlayers);
         });
 
         socket.on('newPrompt', (prompt) => {
-            console.log("new prompt: ", prompt);
             setCurrentPrompt(prompt);
-            setTurnStartTime(new Date());
             setGameState(GameState.ACTIVE);
         });
 
         socket.on('gameFinished', () => {
             setGameState(GameState.FINISHED);
-            console.log('Game Finished');
         });
 
-        socket.on('userDisconnect', (playerId) => {
-            setPlayers(prevPlayers => prevPlayers.filter(p => p.id !== playerId));
+        socket.on('updatePlayers', (updatedPlayers) => {
+            setPlayers(updatedPlayers);
         });
 
         socket.on('guess', (data) => {
-            console.log("Guess received: ", data, "Current Prompt: ", currentPrompt);
-            makeGuess(data.id, data.text);
+            if (data.correct) {
+                console.log("Correct guess: ", data);
+            } else {
+                console.log("Incorrect guess: ", data);
+            }
         });
-
-        // socket.on('chatMessage', (message) => {
-        //     console.log("Chat message received: ", message);
-        //     setMessages(prev => [...prev, message]);
-        // });
 
         return () => {
             socket.off('newPlayer');
             socket.off('newPrompt');
             socket.off('gameFinished');
-            socket.off('userDisconnect');
+            socket.off('updatePlayers');
             socket.off('guess');
-            // socket.off('chatMessage');
         };
     }, []);
 
@@ -79,7 +59,7 @@ const Game = () => {
                     <div className="rounded-lg shadow w-full h-full border border-4 border-gray-800">
                         
                     <div className="h-full w-full bg-white">
-                        <Canvas socket={socket} players={players} currentPrompt={currentPrompt} />
+                        <Canvas socket={socket} players={players} />
                         </div>
                     </div>
                 </div>
