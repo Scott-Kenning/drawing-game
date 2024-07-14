@@ -1,7 +1,7 @@
 # DuoDraw: Real-Time Split-Screen Drawing and Guessing Game
 
 ## Overview
-This application allows four users to participate in a real-time collaborative drawing and guessing game. Two users are assigned to draw based on a given prompt, each editing their half of a split-screen canvas. The remaining two users are tasked with guessing the prompt based on the combined drawing. The app synchronizes drawing data across clients using Socket.IO, ensuring both drawing and guessing users see the full image as it is created.
+This application allows four or more users to participate in a real-time collaborative drawing and guessing game. Two users are assigned to draw based on a given prompt, each editing their half of a split-screen canvas. Each drawer can not see the other's side. The rest of the users are tasked with guessing the prompt based on the combined drawing. Scores are then assigned based on the speed of the guesses. The app synchronizes drawing data across clients using Socket.IO, ensuring both drawing and guessing users see the full image as it is created. The frontend is built in React.
 
 ## Features
 - **Real-Time Collaborative Drawing**: Drawing data is synchronized in real-time across all users.
@@ -13,7 +13,6 @@ This application allows four users to participate in a real-time collaborative d
 
 ## Prerequisites
 - Node.js and npm installed on the server machine.
-- Basic knowledge of React and Socket.IO.
 - A web browser to run the client application.
 
 ## Setup and Installation
@@ -65,10 +64,6 @@ w. **Access the Application**:
 
 2. **Real-Time Updates**:
    - Guessing users will see real-time updates of the drawing as it progresses.
-
-### Split-Screen Functionality
-- The canvas is divided into two halves.
-- Each drawing user can only draw on their assigned half.
 
 ## Code Structure
 
