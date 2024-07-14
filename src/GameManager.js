@@ -36,6 +36,7 @@ class GameManager {
         const player = new Player(id, name);
         this.players.push(player);
       }
+      return this;
     }
 
     startGame() {
@@ -43,17 +44,21 @@ class GameManager {
         this.gameState = GameState.ACTIVE;
         this.nextTurn();
       }
+      return this;
+    }
+
+    getWinner() {
+        return winner = this.players.reduce((a, b) => a.score > b.score ? a : b);
     }
 
     endGame() {
-        const winner = this.players.reduce((a, b) => a.score > b.score ? a : b);
         this.resetGame();
-        return winner;
+        return this;
     }
 
     makeGuess(playerId, guess) {
         if (this.drawers.find(d => d.id === playerId)) {
-            return;
+            return this;
         }
 
         if (this.gameState === GameState.ACTIVE && guess.toLowerCase() === this.currentPrompt) {
@@ -61,6 +66,7 @@ class GameManager {
             const score = this.maxPoints * (this.turnDuration - timeTaken) / this.turnDuration;
             this.updateScore(playerId, Math.max(0, score));
         }
+        return this;
     }
 
     randPrompt() {
@@ -74,7 +80,7 @@ class GameManager {
 
         if (this.turnsElapsed >= this.maxTurns) {
             this.endGame();
-            return;
+            return this;
         }
 
         this.currentPrompt = this.randPrompt();
@@ -89,6 +95,7 @@ class GameManager {
         this.turnTimeout = setTimeout(() => {
             this.nextTurn();
         }, this.turnDuration);
+        return this;
     }
 
     findDrawer() {
@@ -106,6 +113,7 @@ class GameManager {
         if (player) {
             player.score += points;
         }
+        return this;
     }
 
     resetGame() {
@@ -113,6 +121,7 @@ class GameManager {
         this.turnsElapsed = 0;
         this.gameState = GameState.WAITING;
         clearTimeout(this.turnTimeout);
+        return this;
     }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 
-const PlayerList = ({players}) => {
+const PlayerList = (props) => {
+    const players = props.players;
 
     return (
         <div className="flex flex-col h-full rounded-lg shadow border border-gray-300">
