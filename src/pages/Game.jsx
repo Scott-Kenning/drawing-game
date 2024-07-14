@@ -2,6 +2,7 @@ import React from 'react';
 import Chat from '../components/Chat';
 import PlayerList from '../components/PlayerList';
 import '../sunburst.css'; // Make sure this path is correct
+import Canvas from '../components/Canvas';
 
 const Game = () => {
     return (
@@ -19,7 +20,7 @@ const Game = () => {
                     <div className="rounded-lg shadow w-full h-full border border-4 border-gray-800">
                         {/* Drawing board */}
                         <div className="h-full w-full bg-white">
-                            <h1 className="text-4xl text-center pt-4">Drawing Board</h1>
+                            <Canvas />
                         </div>
                     </div>
                 </div>
