@@ -110,6 +110,10 @@ function Canvas(props) {
   };
 
   const handleMouseUp = () => {
+    // Draw a dot if mouse not moved
+    if (!isDrawing) return;
+    drawLine(lastX, lastY, lastX, lastY, true, mode);
+
     setIsDrawing(false);
     setLastX(null);
     setLastY(null);
