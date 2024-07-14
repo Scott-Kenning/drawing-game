@@ -6,8 +6,6 @@ const Chat = (props) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
-    const [user] = useState({ id: Date.now(), name: 'User' + Math.floor(Math.random() * 1000000), text: '' });
-
     // socket handling of chat messages
     useEffect(() => {
         // get chat history
@@ -27,7 +25,7 @@ const Chat = (props) => {
 
     const handleSend = () => {
         if (input.trim()) {
-            const newMessage = { id: messages.length + 1, text: input, sender: user.name };
+            const newMessage = { id: messages.length + 1, text: input, sender: props.user.name };
             // setMessages([...messages, newMessage]);
             socket.emit('chatMessage', newMessage);
             console.log(newMessage);
@@ -46,7 +44,7 @@ const Chat = (props) => {
             <div className="flex-1 overflow-y-auto p-4">
                 {messages.map(message => (
                     <div key={message.id} className={`mb-2 ${message.sender === 'system' ? 'text-blue-700' : 'text-black'}`}>
-                        <span className="font-bold">{message.sender === user.name ? 'You: ' : message.sender + ': '}</span>
+                        <span className="font-bold">{message.sender === props.user.name ? 'You: ' : message.sender + ': '}</span>
                         {message.text}
                     </div>
                 ))}

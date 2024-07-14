@@ -62,13 +62,24 @@ io.on('connection', (socket) => {
         }
     });
 
-    console.log('new player');
-    const newPlayer = { id: socket.id, name: "Player" };
-    players.push(newPlayer);
-    io.emit('newPlayer', players); // Broadcast updated player list to all clients
-    if (players.length >= 2 && gameState === GameState.WAITING) {
-        startGame();
-    }
+    // Get new player
+    socket.on('newPlayer', (player) => {
+      const newPlayer = { id: socket.id, name: player.name, score: 0 };
+      console.log(newPlayer);
+        players.push(newPlayer);
+        io.emit('newPlayerStored', players); // Broadcast updated player list to all clients
+        if (players.length >= 2 && gameState === GameState.WAITING) {
+            startGame();
+        }
+    });
+
+    // console.log('new player');
+    // const newPlayer = { id: socket.id, name: "Player", score: 0 };
+    // players.push(newPlayer);
+    // io.emit('newPlayer', players); // Broadcast updated player list to all clients
+    // if (players.length >= 2 && gameState === GameState.WAITING) {
+    //     startGame();
+    // }
 });
 
 const startGame = () => {

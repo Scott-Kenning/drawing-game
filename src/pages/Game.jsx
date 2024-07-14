@@ -11,9 +11,12 @@ const Game = () => {
     const [players, setPlayers] = useState([]);
     const [gameState, setGameState] = useState(GameState.WAITING);
     const [messages, setMessages] = useState([]);
+    const [user] = useState({ id: Date.now(), name: 'User' + Math.floor(Math.random() * 1000000) });
 
     useEffect(() => {
-        socket.on('newPlayer', (updatedPlayers) => {
+        socket.emit('newPlayer', user);
+
+        socket.on('newPlayerStored', (updatedPlayers) => {
             setPlayers(updatedPlayers);
         });
 
@@ -65,7 +68,7 @@ const Game = () => {
                 </div>
                 <div className="w-full h-[90vh] p-4 pr-12">
                     <div className="rounded-lg bg-white shadow w-full h-full border border-4 border-gray-800">
-                        <Chat socket={socket} messages={messages} />
+                        <Chat socket={socket} messages={messages} user={user}/>
                     </div>
                 </div>
             </div>
