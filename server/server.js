@@ -94,7 +94,20 @@ const nextTurn = () => {
         return;
     }
     currentPrompt = Prompts[currentPromptIndex++];
+
+    let artists = [];
+    for (let j = 0; j < 2; j++) {
+      const sortedPlayers = players.slice().sort((a, b) => a.timesDrawn - b.timesDrawn);
+      // Find the closest player that isn't in the drawers list
+      for (let i = 0; i < sortedPlayers.length; i++) {
+          if (!artists.includes(sortedPlayers[i])) {
+              artists.push(sortedPlayers[i]);
+          }
+      }
+    }
+
     io.emit('newPrompt', currentPrompt);
+    io.emit('setArtists', players);
     turnTimeout = setTimeout(nextTurn, 60000); // Move to the next prompt after 60 seconds
 };
 
