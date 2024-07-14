@@ -44,12 +44,7 @@ io.on('connection', (socket) => {
       drawingData.push(data);
       socket.broadcast.emit('drawing', data);
     });
-  
-    socket.on('chatMessage', (message) => {
-      chatMessages.push(message);
-      io.emit('chatMessage', message);
-      io.emit('guess', { id: socket.id, text: message.text });
-    });
+
 
     socket.on('newPlayer', (name) => {
         console.log('new player:', name);
