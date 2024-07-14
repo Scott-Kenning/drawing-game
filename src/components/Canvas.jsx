@@ -14,7 +14,7 @@ function Canvas(props) {
   const [lastY, setLastY] = useState(null);
   const [mode, setMode] = useState('draw'); // 'draw' or 'erase'
   const [brushColor, setBrushColor] = useState('black');
-  const [brushSize, setBrushSize] = useState(5);
+  const [brushSize, setBrushSize] = useState(8);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -56,9 +56,9 @@ function Canvas(props) {
       drawLine(x0, y0, x1, y1, false, mode, color, size);
     });
 
-    socket.on('clear', () => {
-      clearCanvas(false);
-    });
+    // socket.on('clear', () => {
+    //   clearCanvas(false);
+    // });
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -124,52 +124,52 @@ function Canvas(props) {
     setBrushSize(size);
   };
 
-  1	
-  const clearCanvas = (emit = true) => {
-    const context = contextRef.current;
-    const offscreenContext = offscreenContextRef.current;
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    offscreenContext.clearRect(0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);	
-    if (emit) {
-      socket.emit('clear');
-    }
-  };
+//   const clearCanvas = (emit = true) => {
+//     const context = contextRef.current;
+//     const offscreenContext = offscreenContextRef.current;
+//     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+//     offscreenContext.clearRect(0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);	
+//     if (emit) {
+//       socket.emit('clear');
+//     }
+//   };
 
   return (
     <div ref={containerRef} className='h-full w-full relative'>
       <div className='z-10 absolute top-0 left-0 p-2 bg-white'>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className='hover:font-bold' onClick={() => setMode('draw')}>
+        <div style={{ display: 'flex', gap: '10px' }} className='pb-2'>
+          <button className={`pt-2 h-8 w-8 rounded-full ${mode === 'draw' ? 'outline' : ''}`} onClick={() => setMode('draw')}>
             <FontAwesomeIcon icon={faBrush} style={{ fontSize: '24px' }} />
           </button>
-          <button className='hover:font-bold' onClick={() => setMode('erase')}>
+          <button className={`h-8 w-8 rounded-full ${mode === 'erase' ? 'outline' : ''}`} onClick={() => setMode('erase')}>
             <FontAwesomeIcon icon={faEraser} style={{ color: 'pink', fontSize: '24px' }}/>
             </button>
-          <button className='hover:font-bold' onClick={() => clearCanvas()}>
+          {/* <button className='hover:font-bold' onClick={() => clearCanvas()}>
             <FontAwesomeIcon icon={faTrash} style={{ fontSize: '24px' }} />
-          </button>
+          </button> */}
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={() => handleBrushColorChange('black')}>
-            <FontAwesomeIcon icon={faCircle} style={{ color: 'black' }} />
+            {/* <FontAwesomeIcon icon={faCircle} style={{ color: 'black' }}  /> */}
+            <div className={`bg-black ${brushColor === 'black' ? 'outline' : '' } rounded-full h-6 w-6`}></div>
           </button>
           <button onClick={() => handleBrushColorChange('red')}>
-            <FontAwesomeIcon icon={faCircle} style={{ color: 'red' }} />
+            <div className={`bg-red-500 ${brushColor === 'red' ? 'outline' : '' } rounded-full h-6 w-6`}></div>
           </button>
           <button onClick={() => handleBrushColorChange('blue')}>
-            <FontAwesomeIcon icon={faCircle} style={{ color: 'blue' }} />
+            <div className={`bg-blue-500 ${brushColor === 'blue' ? 'outline' : '' } rounded-full h-6 w-6`}></div>
           </button>
           <button onClick={() => handleBrushColorChange('green')}>
-            <FontAwesomeIcon icon={faCircle} style={{ color: 'green' }} />
+            <div className={`bg-green-500 ${brushColor === 'green' ? 'outline' : '' } rounded-full h-6 w-6`}></div>
           </button>
-          <button onClick={() => handleBrushSizeChange(5)}>
-            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '5px' }} />
+          <button onClick={() => handleBrushSizeChange(8)} >
+            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '10px' }} className={`rounded-full ${brushSize === 8 ? 'outline-gray-800 outline-offset-2 outline' : ''}`}/>
           </button>
-          <button onClick={() => handleBrushSizeChange(10)}>
-            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '10px' }} />
+          <button onClick={() => handleBrushSizeChange(12)} >
+            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '15px' }} className={`rounded-full ${brushSize === 12 ? 'outline-gray-800 outline-offset-2 outline' : ''}`}/>
           </button>
-          <button onClick={() => handleBrushSizeChange(20)}>
-            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '20px' }} />
+          <button onClick={() => handleBrushSizeChange(25)} >
+            <FontAwesomeIcon icon={faCircle} style={{ fontSize: '25px' }} className={`rounded-full ${brushSize === 25 ? 'outline-gray-800 outline-offset-2 outline' : ''}`}/>
           </button>
         </div>
       </div>

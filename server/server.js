@@ -8,12 +8,14 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "*", // Allow all origins for local network
+    // origin: "http://localhost:5173", // Allow all origins for local network
     methods: ["GET", "POST"]
   }
 });
 
 app.use(cors({
   origin: "*", // Allow all origins for local network
+  // origin: "http://localhost:5173", // Allow all origins for local network
   methods: ["GET", "POST"]
 })); // Use CORS middleware
 
