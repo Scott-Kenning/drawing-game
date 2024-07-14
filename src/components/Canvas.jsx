@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBrush, faEraser, faCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
-import io from 'socket.io-client';
 
 function Canvas(props) {
   const socket = props.socket;
