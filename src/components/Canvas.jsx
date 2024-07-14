@@ -4,7 +4,10 @@ import { faBrush, faEraser, faCircle, faTrash } from '@fortawesome/free-solid-sv
 
 function Canvas(props) {
   const socket = props.socket;
-
+  
+  const [isLeftPlayer, setIsLeftPlayer] = useState(true); // Change this to test left/right player logic
+  const [isRightPlayer, setIsRightPlayer] = useState(false); // Change this to test left/right player logic
+  const canDraw = true;
   const canvasRef = useRef(null);
   const offscreenCanvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -22,7 +25,7 @@ function Canvas(props) {
     const offscreenCanvas = offscreenCanvasRef.current;
     const context = canvas.getContext('2d');
     const offscreenContext = offscreenCanvas.getContext('2d');
-    
+
     contextRef.current = context;
     offscreenContextRef.current = offscreenContext;
 
@@ -40,7 +43,23 @@ function Canvas(props) {
         offscreenContext.scale(2, 2);
         context.lineCap = 'round';
         offscreenContext.lineCap = 'round';
+
+        drawMiddleLine();
       }
+    };
+
+    const drawMiddleLine = () => {
+      const middleX = canvas.width / 2; // Middle of the scaled canvas
+      context.save();
+      context.scale(0.5, 0.5); // Adjust for the scaling
+      context.beginPath();
+      context.moveTo(middleX, 0);
+      context.lineTo(middleX, canvas.height);
+      context.strokeStyle = 'gray';
+      context.lineWidth = 2;
+      context.stroke();
+      context.closePath();
+      context.restore();
     };
 
     handleResize();
@@ -63,7 +82,7 @@ function Canvas(props) {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [socket]);
 
   const drawLine = (x0, y0, x1, y1, emit, mode, color = brushColor, size = brushSize) => {
     const context = contextRef.current;
@@ -95,25 +114,37 @@ function Canvas(props) {
   };
 
   const handleMouseDown = (event) => {
+    if(!canDraw) return;
+    const { offsetX } = event.nativeEvent;
+    if ((isLeftPlayer && offsetX > canvasRef.current.width / 4) || 
+        (isRightPlayer && offsetX <= canvasRef.current.width / 4)) return;
+
     setIsDrawing(true);
-    const { offsetX, offsetY } = event.nativeEvent;
-    setLastX(offsetX);
-    setLastY(offsetY);
+    const { offsetX: x, offsetY: y } = event.nativeEvent;
+    setLastX(x);
+    setLastY(y);
   };
 
   const handleMouseMove = (event) => {
+    if(!canDraw) return;
     if (!isDrawing) return;
     const { offsetX, offsetY } = event.nativeEvent;
+    if ((isLeftPlayer && offsetX > canvasRef.current.width / 4) || 
+        (isRightPlayer && offsetX <= canvasRef.current.width / 4)) {
+      setIsDrawing(false);
+      return;
+    }
     drawLine(lastX, lastY, offsetX, offsetY, true, mode);
     setLastX(offsetX);
     setLastY(offsetY);
   };
 
   const handleMouseUp = () => {
+    if(!canDraw) return;
     // Draw a dot if mouse not moved
     if (!isDrawing) return;
     drawLine(lastX, lastY, lastX, lastY, true, mode);
-
+    
     setIsDrawing(false);
     setLastX(null);
     setLastY(null);
@@ -128,12 +159,12 @@ function Canvas(props) {
     setBrushSize(size);
   };
 
-  1	
   const clearCanvas = (emit = true) => {
     const context = contextRef.current;
     const offscreenContext = offscreenContextRef.current;
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    offscreenContext.clearRect(0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);	
+    offscreenContext.clearRect(0, 0, offscreenCanvasRef.current.width, offscreenCanvasRef.current.height);  
+    drawMiddleLine();
     if (emit) {
       socket.emit('clear');
     }
@@ -148,7 +179,7 @@ function Canvas(props) {
           </button>
           <button className='hover:font-bold' onClick={() => setMode('erase')}>
             <FontAwesomeIcon icon={faEraser} style={{ color: 'pink', fontSize: '24px' }}/>
-            </button>
+          </button>
           <button className='hover:font-bold' onClick={() => clearCanvas()}>
             <FontAwesomeIcon icon={faTrash} style={{ fontSize: '24px' }} />
           </button>
