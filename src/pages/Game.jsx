@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chat from '../components/Chat';
 import PlayerList from '../components/PlayerList';
 import Canvas from '../components/Canvas';
-import { GameState } from '../GameManager';
+import { GameManager, GameState } from '../GameManager';
+import Waiting from './Waiting';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:3001');
+// const socket = io('http://134.87.57.28/3001');
 
 const Game = () => {
     const [players, setPlayers] = useState([]);
@@ -63,6 +66,7 @@ const Game = () => {
                 <div className="w-full max-h-[90vh] p-4 pl-12 flex flex-col gap-[2vh]">
                     <p className='min-h-[5vh] bg-white rounded border-4 border-black font-semibold'>Turn 1/5</p>
                     <div className="rounded-lg bg-white shadow w-full h-full border border-4 border-gray-800">
+                        <PlayerList players={players} />
                         <PlayerList players={players} />
                     </div>
                 </div>

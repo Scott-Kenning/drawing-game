@@ -24,16 +24,19 @@ let players = [];
 let turnTimeout = null;
 
 const io = socketIo(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"]
-    }
+  cors: {
+    origin: "*", // Allow all origins for local network
+    // origin: "http://localhost:5173", // Allow all origins for local network
+    methods: ["GET", "POST"]
+  }
 });
 
 app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
-}));
+  origin: "*", // Allow all origins for local network
+  // origin: "http://localhost:5173", // Allow all origins for local network
+  methods: ["GET", "POST"]
+})); // Use CORS middleware
+
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
@@ -111,6 +114,6 @@ const nextTurn = () => {
     turnTimeout = setTimeout(nextTurn, 60000); // Move to the next prompt after 60 seconds
 };
 
-server.listen(3001, () => {
-    console.log('listening on *:3001');
+server.listen(3001, '0.0.0.0', () => {
+  console.log('listening on *:3001');
 });
