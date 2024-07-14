@@ -35,7 +35,7 @@ First, clone the repo.
    - From the source cloned directory, run `npm install` to install the dependencies.
 
 2. **Run the front-end code**:
-   - Run the front-end code by running: `npm run dev`.
+   - Run the front-end code by running: `npx vite`.
 
 w. **Access the Application**:
    - Open a web browser and navigate to `http://localhost:5173`.
@@ -61,6 +61,7 @@ w. **Access the Application**:
 ### Guessing the Prompt
 1. **Input Guess**:
    - Guessing users can input their guesses for the prompt based on the combined drawing.
+   - Users will see other users guesses.
 
 2. **Real-Time Updates**:
    - Guessing users will see real-time updates of the drawing as it progresses.
@@ -68,11 +69,11 @@ w. **Access the Application**:
 ## Code Structure
 
 ### Backend (`server.js`)
-- **Express Server**: Handles HTTP requests and serves static files.
-- **Socket.IO**: Manages real-time communication between the server and clients.
+- **Node Server (Express)**: Handles requests to maintain a stable state.
+- **Socket.IO**: Manages real-time communication between the server and clients to communicate the game state.
 - **CORS Middleware**: Enables cross-origin requests from the frontend.
 
-### Frontend (`Canvas.jsx`)
+### Frontend
 - **Canvas Drawing**: Manages the drawing logic using HTML5 canvas.
 - **Socket.IO Client**: Connects to the backend server for real-time updates.
 - **UI Elements**: Provides buttons for brush selection, erasing, clearing the canvas, and input for guessing the prompt.
@@ -82,27 +83,5 @@ w. **Access the Application**:
 - **Room Management**: Allow multiple groups of four users to create separate rooms and play independently.
 - **Mobile Support**: Optimize the UI and canvas drawing for mobile devices.
 - **Advanced Tools**: Add more drawing tools like shapes, text, and fill.
-
-## Troubleshooting
-
-### Common Issues
-1. **Socket Connection Errors**:
-   - Ensure the backend server is running and accessible at the correct URL.
-   - Check for any firewall or network issues that might block the connection.
-
-2. **Canvas Not Syncing**:
-   - Verify that the Socket.IO events are being emitted and received correctly.
-   - Check the console logs for any errors and ensure the drawing data is being handled properly.
-
-3. **Styling Issues**:
-   - Ensure that the CSS is correctly applied to the components.
-   - Verify that the font size and other styles are correctly set for the icons and canvas.
-
-### Debugging Tips
-- Use browser developer tools to inspect the network activity and console logs.
-- Add console logs in the client and server code to trace the flow of events and data.
-- Ensure that the frontend and backend are using compatible versions of Socket.IO.
-
----
-
-This documentation provides a comprehensive guide to using, and troubleshooting the real-time split-screen drawing and guessing game. It also outlines potential future improvements and common issues with debugging tips to help you further enhance and maintain the application.
+- **Finished Turn System**: Add a working turn system with a game winner.
+- **Hide Correct Guesses**: Users should not be able to see other correct guesses.
