@@ -11,11 +11,17 @@ const Game = () => {
     const [players, setPlayers] = useState([]);
     const [gameState, setGameState] = useState(GameState.WAITING);
     const [messages, setMessages] = useState([]);
+    const [artists, setArtists] = useState([]);
     const [currentPrompt, setCurrentPrompt] = useState('');
 
     useEffect(() => {
         socket.on('newPlayer', (updatedPlayers) => {
             setPlayers(updatedPlayers);
+        });
+
+        socket.on('setArtists', (players) => {
+            console.log("Setting artists: ", players);
+            setArtists(players);
         });
 
         socket.on('newPrompt', (prompt) => {
