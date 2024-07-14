@@ -1,12 +1,6 @@
 import React from 'react';
 
-const PlayerList = () => {
-    const players = [
-        { id: 1, name: 'Player 1', score: 300 },
-        { id: 2, name: 'Player 2', score: 50 },
-        { id: 3, name: 'Player 3', score: 120 },
-        { id: 4, name: 'Player 4', score: 0 },
-    ];
+const PlayerList = ({players}) => {
 
     return (
         <div className="flex flex-col h-full rounded-lg shadow border border-gray-300">
