@@ -1,4 +1,5 @@
 # DuoDraw: Real-Time Split-Screen Drawing and Guessing Game
+This project was created during the UVic Summer 2024 WEC Qualifier hackathon
 
 ## Overview
 This application allows four or more users to participate in a real-time collaborative drawing and guessing game. Two users are assigned to draw based on a given prompt, each editing their half of a split-screen canvas. Each drawer can not see the other's side. The rest of the users are tasked with guessing the prompt based on the combined drawing. Scores are then assigned based on the speed of the guesses. The app synchronizes drawing data across clients using Socket.IO, ensuring both drawing and guessing users see the full image as it is created. The frontend is built in React.
